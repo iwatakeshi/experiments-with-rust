@@ -1,0 +1,6 @@
+[package]
+name = "thread_spawn"
+version = "0.1.0"
+authors = ["Takeshi <iwatakeshi@gmail.com>"]
+
+[dependencies]
