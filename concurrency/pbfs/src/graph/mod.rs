@@ -1,5 +1,6 @@
 extern crate rand;
 use self::rand::{thread_rng, Rng};
+use std::option::Option;
 mod edge;
 
 pub struct Graph {
@@ -24,7 +25,7 @@ impl Graph {
         v
       },
       adj_list: {
-        let mut vec = vec![vec![0; size as usize]; size as usize];
+        let mut vec = vec![vec![]; size as usize];
         vec
       },
       adj_matrix: {
@@ -45,13 +46,25 @@ impl Graph {
       self.adj_matrix[w as usize][v as usize] = distance;
       if !self.contains_vertex(v) {
         self.vertices.push(v);
+      }
+      if !self.contains_neighbor(v, w) {
         self.adj_list[v as usize].push(w);
       }
       if !self.contains_vertex(w) {
         self.vertices.push(w);
+      }
+      if !self.contains_neighbor(w, v) {
         self.adj_list[w as usize].push(v);
       }
     }
+  }
+
+  pub fn get_edge(&mut self, v: u32, w: u32) -> Option<&edge::Edge> {
+    return self.edges.iter().find(|ref edge| edge.v == v && edge.w == w);
+  }
+
+  pub fn get_neighbors(&mut self, v: u32) -> &Vec<u32> {
+    return &(self.adj_list)[v as usize];
   }
 
   pub fn contains_vertex(&mut self, v: u32) -> bool {
@@ -61,6 +74,11 @@ impl Graph {
   pub fn contains_edge(&mut self, v: u32, w: u32) -> bool {
     return self.edges.len() > 0 && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
   }
+
+  pub fn contains_neighbor(&mut self, v: u32, w: u32) -> bool {
+    return self.adj_list[v as usize].iter().any(|u| u == &w);
+  }
+
   pub fn randomize(&mut self, low: u32, high: u32) {
     let mut rng = thread_rng();
     for i in 0..self.size {
