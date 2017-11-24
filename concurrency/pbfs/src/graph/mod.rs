@@ -55,13 +55,11 @@ impl Graph {
   }
 
   pub fn contains_vertex(&mut self, v: u32) -> bool {
-    let t = self.vertices.len() > 0 && self.vertices.iter().any(|vertex| vertex == &v);
-    t
+    return self.vertices.len() > 0 && self.vertices.iter().any(|vertex| vertex == &v);
   }
 
   pub fn contains_edge(&mut self, v: u32, w: u32) -> bool {
-    let t = self.edges.len() > 0 && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
-    t
+    return self.edges.len() > 0 && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
   }
   pub fn randomize(&mut self, low: u32, high: u32) {
     let mut rng = thread_rng();
