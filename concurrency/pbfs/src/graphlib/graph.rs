@@ -1,7 +1,10 @@
+// Author: Takeshi I.
+
 extern crate rand;
+
 use self::rand::{thread_rng, Rng};
 use std::option::Option;
-mod edge;
+use super::edge;
 
 pub struct Graph {
   pub size: u32,
@@ -60,11 +63,17 @@ impl Graph {
   }
 
   pub fn get_edge(&mut self, v: u32, w: u32) -> Option<&edge::Edge> {
-    return self.edges.iter().find(|ref edge| edge.v == v && edge.w == w);
+    return self
+      .edges
+      .iter()
+      .find(|ref edge| edge.v == v && edge.w == w);
   }
 
-  pub fn get_neighbors(&mut self, v: u32) -> &Vec<u32> {
-    return &(self.adj_list)[v as usize];
+  pub fn get_neighbors(&mut self, v: u32) -> Option<&Vec<u32>> {
+    if self.adj_list[v as usize].len() > 0 {
+      return Some(&(self.adj_list)[v as usize]);
+    }
+    None
   }
 
   pub fn contains_vertex(&mut self, v: u32) -> bool {
@@ -99,5 +108,17 @@ impl Graph {
       println!("");
     }
     println!("");
+  }
+
+  pub fn print_neighbors(&mut self, v: u32) {
+    match self.get_neighbors(v) {
+      Some(neighbors) => {
+        for i in neighbors {
+          print!("{number:>width$}", number = i, width = 3);
+        }
+        println!("");
+      }
+      None => println!("No neighbors found."),
+    }
   }
 }

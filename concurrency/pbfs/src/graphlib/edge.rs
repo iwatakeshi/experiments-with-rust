@@ -1,3 +1,4 @@
+// Author: Takeshi I.
 use std::cmp::Ordering;
 #[derive(Eq)]
 #[allow(unused)]
