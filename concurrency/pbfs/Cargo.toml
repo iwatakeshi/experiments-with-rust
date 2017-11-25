@@ -6,3 +6,7 @@ authors = ["Takeshi <iwatakeshi@gmail.com>"]
 [dependencies]
 
 rand = "0.3.14"
+
+[[bin]]
+name = "pbfs"
+doc = false

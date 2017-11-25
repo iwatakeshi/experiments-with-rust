@@ -1,4 +1,7 @@
-// Author: Takeshi I.
+/*
+  Authors:
+  Takeshi I.
+*/
 
 extern crate rand;
 
@@ -6,13 +9,41 @@ use self::rand::{thread_rng, Rng};
 use std::option::Option;
 use super::edge;
 
+/// `Graph` is a simple graph data structure using an adjacency list and an adjacency matrix.
+///
+/// Here's an example of generating a random graph with undirected weighted edges:
+///
+/// ```
+/// mod graphlib;
+/// use graphlib::graph;
+/// use graphlib::algorithms;
+///
+/// let mut g = graph::Graph::new(4);
+/// g.add_directed_edge(0, 1);
+/// g.add_directed_edge(0, 2);
+/// g.add_directed_edge(1, 2);
+/// g.add_directed_edge(2, 0);
+/// g.add_directed_edge(2, 3);
+/// g.add_directed_edge(3, 3);
+/// g.print();
+///
+/// match algorithms::bfs::serial::bfs(g, 3) {
+///   Some(result) => {
+///     let (distance, path) = result;
+///     println!("Distance: {}, Path: {:?}", distance, path);
+///   }
+///   None => println!("No path was found."),
+/// }
+
+
+
 pub struct Graph {
   pub size: u32,
   pub edges: Vec<edge::Edge>,
   pub vertices: Vec<u32>,
   pub adj_list: Vec<Vec<u32>>,
   pub adj_matrix: Vec<Vec<u32>>,
-  pub weighted: bool
+  pub weighted: bool,
 }
 
 #[allow(unused)]
@@ -36,7 +67,7 @@ impl Graph {
         let mut vec = vec![vec![0; size as usize]; size as usize];
         vec
       },
-      weighted: false
+      weighted: false,
     }
   }
 
@@ -89,6 +120,40 @@ impl Graph {
     }
   }
 
+  pub fn add_directed_edge(&mut self, v: u32, w: u32) {
+    if !self.contains_edge(v, w) && v < self.size && w < self.size {
+      self.edges.push(edge::Edge {
+        v: v,
+        w: w,
+        distance: 0,
+      });
+      self.adj_matrix[v as usize][w as usize] = 1;
+      if !self.contains_vertex(v) {
+        self.vertices.push(v);
+      }
+      if !self.contains_neighbor(v, w) {
+        self.adj_list[v as usize].push(w);
+      }
+    }
+  }
+
+  pub fn add_directed_weighted_edge(&mut self, v: u32, w: u32, distance: u32) {
+    if !self.contains_edge(v, w) && v < self.size && w < self.size {
+      self.edges.push(edge::Edge {
+        v: v,
+        w: w,
+        distance: 0,
+      });
+      self.adj_matrix[v as usize][w as usize] = distance;
+      if !self.contains_vertex(v) {
+        self.vertices.push(v);
+      }
+      if !self.contains_neighbor(v, w) {
+        self.adj_list[v as usize].push(w);
+      }
+    }
+  }
+
   pub fn get_edge(&self, v: u32, w: u32) -> Option<&edge::Edge> {
     return self
       .edges
@@ -111,15 +176,16 @@ impl Graph {
   }
 
   pub fn contains_vertex(&self, v: u32) -> bool {
-    return self.vertices.len() > 0 && self.vertices.iter().any(|vertex| vertex == &v);
+    return !self.vertices.is_empty() && self.vertices.contains(&v);
   }
 
   pub fn contains_edge(&self, v: u32, w: u32) -> bool {
-    return self.edges.len() > 0 && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
+    return !self.vertices.is_empty()
+      && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
   }
 
   pub fn contains_neighbor(&self, v: u32, w: u32) -> bool {
-    return self.adj_list[v as usize].iter().any(|u| u == &w);
+    return self.adj_list[v as usize].contains(&w);
   }
 
   pub fn randomize_weights(&mut self, low: u32, high: u32) {

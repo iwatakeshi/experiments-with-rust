@@ -1,8 +1,16 @@
+/*
+  Authors:
+  Takeshi I.
+*/
 use std::option::Option;
 use std::collections::VecDeque;
 use super::super::super::graph;
 
 #[allow(unused)]
+/// `bfs` searches the tree using the starting vertex *s* and explores
+/// the neighbor verticies first, before moving to the next level neighbors.
+/// Once the search has been completed, `bfs` returns a tuple containing
+/// the distance and the path taken respectively.
 pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
   // Mark all vertices as not visited
   let mut visited: Vec<_> = (0..(g.vertices.len())).map(|_| false).collect();
@@ -17,13 +25,11 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
   let mut total_dist = 0;
   // Choose vertex u from queue
   while let Some(v) = q.pop_front() {
-    //  print!("Here: {}", v);
     path.push(v);
     // Get the neighbors of w
     if let Some(neighbor) = g.get_neighbors(v) {
       // For each unvisited w
       for &w in neighbor {
-        // println!("here");
         if visited[w as usize] == false {
           // Mark w
           visited[w as usize] = true;
@@ -31,7 +37,6 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
           q.push_back(w);
         }
       }
-      println!("");
     }
   }
   println!("");
