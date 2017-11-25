@@ -6,9 +6,9 @@ use std::cmp::Ordering;
 #[derive(Eq)]
 #[allow(unused)]
 pub struct Edge {
-  pub v: u32,
-  pub w: u32,
-  pub distance: u32
+  pub v: usize,
+  pub w: usize,
+  pub distance: usize
 }
 
 #[allow(unused)]

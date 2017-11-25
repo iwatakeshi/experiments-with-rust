@@ -11,12 +11,11 @@ use super::super::super::graph;
 /// the neighbor verticies first, before moving to the next level neighbors.
 /// Once the search has been completed, `bfs` returns a tuple containing
 /// the distance and the path taken respectively.
-pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
-
+pub fn bfs(mut g: graph::Graph, s: usize) -> Option<(usize, Vec<usize>)> {
   // Mark all vertices as not visited
   let mut visited: Vec<_> = (0..(g.vertices.len())).map(|_| false).collect();
   let mut q = VecDeque::new();
-  let mut path: Vec<u32> = Vec::new();
+  let mut path: Vec<usize> = Vec::new();
 
   // Check if the start vertex exists
   if !g.contains_vertex(s) {
@@ -25,7 +24,7 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
   // Insert s into queue until it's neighbor's are marked
   q.push_back(s);
   // Mark s as visited
-  visited[s as usize] = true;
+  visited[s] = true;
 
   let mut total_dist = 0;
   // Choose vertex u from queue
@@ -35,9 +34,9 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
     if let Some(neighbor) = g.get_neighbors(v) {
       // For each unvisited w
       for &w in neighbor {
-        if visited[w as usize] == false {
+        if visited[w] == false {
           // Mark w
-          visited[w as usize] = true;
+          visited[w] = true;
           // Add w to the queue
           q.push_back(w);
         }
@@ -47,7 +46,7 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
   println!("");
 
   for i in 0..(path.len() - 1) {
-    total_dist += g.get_distance(path[i as usize], path[(i + 1) as usize]);
+    total_dist += g.get_distance(path[i], path[(i + 1)]);
   }
 
   if total_dist != 0 || !g.weighted {

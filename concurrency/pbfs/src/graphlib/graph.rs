@@ -38,17 +38,17 @@ use super::edge;
 
 
 pub struct Graph {
-  pub size: u32,
+  pub size: usize,
   pub edges: Vec<edge::Edge>,
-  pub vertices: Vec<u32>,
-  pub adj_list: Vec<Vec<u32>>,
-  pub adj_matrix: Vec<Vec<u32>>,
+  pub vertices: Vec<usize>,
+  pub adj_list: Vec<Vec<usize>>,
+  pub adj_matrix: Vec<Vec<usize>>,
   pub weighted: bool,
 }
 
 #[allow(unused)]
 impl Graph {
-  pub fn new(size: u32) -> Graph {
+  pub fn new(size: usize) -> Graph {
     Graph {
       size: size,
       edges: {
@@ -60,42 +60,42 @@ impl Graph {
         v
       },
       adj_list: {
-        let mut vec = vec![vec![]; size as usize];
+        let mut vec = vec![vec![]; size];
         vec
       },
       adj_matrix: {
-        let mut vec = vec![vec![0; size as usize]; size as usize];
+        let mut vec = vec![vec![0; size]; size];
         vec
       },
       weighted: false,
     }
   }
 
-  pub fn add_edge(&mut self, v: u32, w: u32) {
+  pub fn add_edge(&mut self, v: usize, w: usize) {
     if !self.contains_edge(v, w) && v < self.size && w < self.size {
       self.edges.push(edge::Edge {
         v: v,
         w: w,
         distance: 0,
       });
-      self.adj_matrix[v as usize][w as usize] = 1;
-      self.adj_matrix[w as usize][v as usize] = 1;
+      self.adj_matrix[v][w] = 1;
+      self.adj_matrix[w][v] = 1;
       if !self.contains_vertex(v) {
         self.vertices.push(v);
       }
       if !self.contains_neighbor(v, w) {
-        self.adj_list[v as usize].push(w);
+        self.adj_list[v].push(w);
       }
       if !self.contains_vertex(w) {
         self.vertices.push(w);
       }
       if !self.contains_neighbor(w, v) {
-        self.adj_list[w as usize].push(v);
+        self.adj_list[w].push(v);
       }
     }
   }
 
-  pub fn add_weighted_edge(&mut self, v: u32, w: u32, distance: u32) {
+  pub fn add_weighted_edge(&mut self, v: usize, w: usize, distance: usize) {
     if !self.contains_edge(v, w) && v < self.size && w < self.size {
       self.weighted = true;
       self.edges.push(edge::Edge {
@@ -103,96 +103,96 @@ impl Graph {
         w: w,
         distance: distance,
       });
-      self.adj_matrix[v as usize][w as usize] = distance;
-      self.adj_matrix[w as usize][v as usize] = distance;
+      self.adj_matrix[v][w] = distance;
+      self.adj_matrix[w][v] = distance;
       if !self.contains_vertex(v) {
         self.vertices.push(v);
       }
       if !self.contains_neighbor(v, w) {
-        self.adj_list[v as usize].push(w);
+        self.adj_list[v].push(w);
       }
       if !self.contains_vertex(w) {
         self.vertices.push(w);
       }
       if !self.contains_neighbor(w, v) {
-        self.adj_list[w as usize].push(v);
+        self.adj_list[w].push(v);
       }
     }
   }
 
-  pub fn add_directed_edge(&mut self, v: u32, w: u32) {
+  pub fn add_directed_edge(&mut self, v: usize, w: usize) {
     if !self.contains_edge(v, w) && v < self.size && w < self.size {
       self.edges.push(edge::Edge {
         v: v,
         w: w,
         distance: 0,
       });
-      self.adj_matrix[v as usize][w as usize] = 1;
+      self.adj_matrix[v][w] = 1;
       if !self.contains_vertex(v) {
         self.vertices.push(v);
       }
       if !self.contains_neighbor(v, w) {
-        self.adj_list[v as usize].push(w);
+        self.adj_list[v].push(w);
       }
     }
   }
 
-  pub fn add_directed_weighted_edge(&mut self, v: u32, w: u32, distance: u32) {
+  pub fn add_directed_weighted_edge(&mut self, v: usize, w: usize, distance: usize) {
     if !self.contains_edge(v, w) && v < self.size && w < self.size {
       self.edges.push(edge::Edge {
         v: v,
         w: w,
         distance: 0,
       });
-      self.adj_matrix[v as usize][w as usize] = distance;
+      self.adj_matrix[v][w] = distance;
       if !self.contains_vertex(v) {
         self.vertices.push(v);
       }
       if !self.contains_neighbor(v, w) {
-        self.adj_list[v as usize].push(w);
+        self.adj_list[v].push(w);
       }
     }
   }
 
-  pub fn get_edge(&self, v: u32, w: u32) -> Option<&edge::Edge> {
+  pub fn get_edge(&self, v: usize, w: usize) -> Option<&edge::Edge> {
     return self
       .edges
       .iter()
       .find(|ref edge| edge.v == v && edge.w == w);
   }
 
-  pub fn get_neighbors(&self, v: u32) -> Option<&Vec<u32>> {
-    if self.adj_list[v as usize].len() > 0 {
-      return Some(&(self.adj_list)[v as usize]);
+  pub fn get_neighbors(&self, v: usize) -> Option<&Vec<usize>> {
+    if self.adj_list[v].len() > 0 {
+      return Some(&(self.adj_list)[v]);
     }
     None
   }
 
-  pub fn get_distance(&self, v: u32, w: u32) -> u32 {
+  pub fn get_distance(&self, v: usize, w: usize) -> usize {
     if let Some(edge) = self.get_edge(v, w) {
       return edge.distance;
     }
     return 0;
   }
 
-  pub fn contains_vertex(&self, v: u32) -> bool {
+  pub fn contains_vertex(&self, v: usize) -> bool {
     return !self.vertices.is_empty() && self.vertices.contains(&v);
   }
 
-  pub fn contains_edge(&self, v: u32, w: u32) -> bool {
+  pub fn contains_edge(&self, v: usize, w: usize) -> bool {
     return !self.vertices.is_empty()
       && self.edges.iter().any(|ref edge| edge.v == v && edge.w == w);
   }
 
-  pub fn contains_neighbor(&self, v: u32, w: u32) -> bool {
-    return self.adj_list[v as usize].contains(&w);
+  pub fn contains_neighbor(&self, v: usize, w: usize) -> bool {
+    return self.adj_list[v].contains(&w);
   }
 
-  pub fn randomize_weights(&mut self, low: u32, high: u32) {
+  pub fn randomize_weights(&mut self, low: usize, high: usize) {
     let mut rng = thread_rng();
     for i in 0..self.size {
       for j in 0..self.size {
-        let n: u32 = rng.gen_range(low, high);
+        let n: usize = rng.gen_range(low, high);
         if i != j {
           self.add_weighted_edge(i, j, n);
         }
@@ -200,11 +200,11 @@ impl Graph {
     }
   }
 
-  pub fn randomize_directed_weights(&mut self, low: u32, high: u32) {
+  pub fn randomize_directed_weights(&mut self, low: usize, high: usize) {
     let mut rng = thread_rng();
     for i in 0..self.size {
       for j in 0..self.size {
-        let n: u32 = rng.gen_range(low, high);
+        let n: usize = rng.gen_range(low, high);
         self.add_directed_weighted_edge(i, j, n);
       }
     }
@@ -220,7 +220,7 @@ impl Graph {
     println!("");
   }
 
-  pub fn print_neighbors(&self, v: u32) {
+  pub fn print_neighbors(&self, v: usize) {
     match self.get_neighbors(v) {
       Some(neighbors) => {
         for i in neighbors {
