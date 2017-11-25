@@ -5,7 +5,7 @@ use std::cmp::Ordering;
 pub struct Edge {
   pub v: u32,
   pub w: u32,
-  pub distance: u32,
+  pub distance: u32
 }
 
 #[allow(unused)]

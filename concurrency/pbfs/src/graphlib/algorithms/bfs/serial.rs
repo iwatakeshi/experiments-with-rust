@@ -2,50 +2,45 @@ use std::option::Option;
 use std::collections::VecDeque;
 use super::super::super::graph;
 
-#[derive(Debug)]
-enum Color {
-  White,
-  Gray,
-  Black,
-}
-
 #[allow(unused)]
-pub fn bfs(ref mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
-  // An vector of colors
-  let mut color: Vec<_> = (0..g.vertices.len()).map(|_| Color::White).collect();
-  let mut dist: Vec<_> = (0..g.vertices.len()).map(|_| u32::max_value()).collect();
-  let mut pred: Vec<Option<u32>> = (0..g.vertices.len()).map(|_| Option::None).collect();
-  let mut q: VecDeque<u32> = VecDeque::new();
+pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
+  // Mark all vertices as not visited
+  let mut visited: Vec<_> = (0..(g.vertices.len())).map(|_| false).collect();
+  let mut q = VecDeque::new();
   let mut path: Vec<u32> = Vec::new();
 
-  dist[s as usize] = 0;
-  color[s as usize] = Color::Gray;
-  pred[s as usize] = Option::None;
+  // Insert s into queue until it's neighbor's are marked
   q.push_back(s);
+  // Mark s as visited
+  visited[s as usize] = true;
 
-  let mut total_dist: u32 = 0;
-  while let Some(u) = q.pop_front() {
-    path.push(u);
-    total_dist += dist[u as usize];
-
-    match g.get_neighbors(u) {
-      Some(neighbors) => for &v in neighbors {
-        match color[v as usize] {
-          Color::White => {
-            color[v as usize] = Color::Gray;
-            dist[v as usize] = dist[u as usize] + 1;
-            pred[v as usize] = Some(u);
-            q.push_back(v);
-          }
-          _ => {}
+  let mut total_dist = 0;
+  // Choose vertex u from queue
+  while let Some(v) = q.pop_front() {
+    //  print!("Here: {}", v);
+    path.push(v);
+    // Get the neighbors of w
+    if let Some(neighbor) = g.get_neighbors(v) {
+      // For each unvisited w
+      for &w in neighbor {
+        // println!("here");
+        if visited[w as usize] == false {
+          // Mark w
+          visited[w as usize] = true;
+          // print!("{number:>width$}", number=w, width=3);
+          q.push_back(w);
         }
-      },
-      None => break,
+      }
+      println!("");
     }
-    color[u as usize] = Color::Black;
+  }
+  println!("");
+
+  for i in 0..(path.len() - 1) {
+    total_dist += g.get_distance(path[i as usize], path[(i + 1) as usize]);
   }
 
-  if total_dist != 0 {
+  if total_dist != 0 || !g.weighted {
     return Some((total_dist, path));
   }
 

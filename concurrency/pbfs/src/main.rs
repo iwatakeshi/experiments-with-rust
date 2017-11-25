@@ -3,16 +3,25 @@ use graphlib::graph;
 use graphlib::algorithms;
 
 fn main() {
-  let mut g = graph::Graph::new(5);
-  g.randomize(1, 10);
+  let mut g = graph::Graph::new(4);
+  // g.randomize(1, 4);
+  g.add_edge(0, 1);
+  g.add_edge(0, 2);
+  g.add_edge(1, 2);
+  g.add_edge(2, 0);
+  g.add_edge(2, 3);
+  g.add_edge(3, 3);
   g.print();
-  println!("Neighbors of b");
-  g.print_neighbors(1);
-  match algorithms::bfs::serial::bfs(g, 0) {
+
+  for i in 0..g.size {
+    g.print_neighbors(i);
+  }
+
+  match algorithms::bfs::serial::bfs(g, 1) {
     Some(result) => {
       let (distance, path) = result;
-      println!("Distance: {}, path: {:?}", distance, path);
-    },
+      println!("Distance: {}, Path: {:?}", distance, path);
+    }
     None => println!("No path was found."),
   }
 }
