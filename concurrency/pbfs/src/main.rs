@@ -3,11 +3,11 @@
   Takeshi I.
 */
 mod graphlib;
-use graphlib::graph;
-use graphlib::algorithms;
+use graphlib::graph::Graph;
+use graphlib::algorithms::bfs::serial::bfs;
 
 fn main() {
-  let mut g = graph::Graph::new(4);
+  let mut g = Graph::new(4);
 
   g.add_directed_edge(0, 1);
   g.add_directed_edge(0, 2);
@@ -17,7 +17,7 @@ fn main() {
   g.add_directed_edge(3, 3);
   g.print();
 
-  match algorithms::bfs::serial::bfs(g, 5) {
+  match bfs(g, 2) {
     Some(result) => {
       // let (distance, path) = result;
       println!("Path: {:?}", result.1);

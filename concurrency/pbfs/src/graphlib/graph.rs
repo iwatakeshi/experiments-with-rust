@@ -200,6 +200,16 @@ impl Graph {
     }
   }
 
+  pub fn randomize_directed_weights(&mut self, low: u32, high: u32) {
+    let mut rng = thread_rng();
+    for i in 0..self.size {
+      for j in 0..self.size {
+        let n: u32 = rng.gen_range(low, high);
+        self.add_directed_weighted_edge(i, j, n);
+      }
+    }
+  }
+
   pub fn print(&self) {
     for i in &self.adj_matrix {
       for j in i.iter() {
