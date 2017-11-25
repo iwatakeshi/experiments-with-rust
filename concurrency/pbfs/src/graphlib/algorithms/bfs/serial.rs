@@ -38,7 +38,7 @@ pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
         if visited[w as usize] == false {
           // Mark w
           visited[w as usize] = true;
-          // print!("{number:>width$}", number=w, width=3);
+          // Add w to the queue
           q.push_back(w);
         }
       }
