@@ -12,11 +12,16 @@ use super::super::super::graph;
 /// Once the search has been completed, `bfs` returns a tuple containing
 /// the distance and the path taken respectively.
 pub fn bfs(mut g: graph::Graph, s: u32) -> Option<(u32, Vec<u32>)> {
+
   // Mark all vertices as not visited
   let mut visited: Vec<_> = (0..(g.vertices.len())).map(|_| false).collect();
   let mut q = VecDeque::new();
   let mut path: Vec<u32> = Vec::new();
 
+  // Check if the start vertex exists
+  if !g.contains_vertex(s) {
+    return None;
+  }
   // Insert s into queue until it's neighbor's are marked
   q.push_back(s);
   // Mark s as visited

@@ -17,10 +17,10 @@ fn main() {
   g.add_directed_edge(3, 3);
   g.print();
 
-  match algorithms::bfs::serial::bfs(g, 3) {
+  match algorithms::bfs::serial::bfs(g, 5) {
     Some(result) => {
-      let (distance, path) = result;
-      println!("Distance: {}, Path: {:?}", distance, path);
+      // let (distance, path) = result;
+      println!("Path: {:?}", result.1);
     }
     None => println!("No path was found."),
   }
