@@ -4,14 +4,14 @@
 */
 use std::option::Option;
 use std::collections::VecDeque;
-use super::super::super::graph;
+use graphlib::graph;
 
 #[allow(unused)]
-/// `bfs` searches the tree using the starting vertex *s* and explores
+/// `search` searches the tree using the starting vertex *s* and explores
 /// the neighbor verticies first, before moving to the next level neighbors.
-/// Once the search has been completed, `bfs` returns a tuple containing
+/// Once the search has been completed, `search` returns a tuple containing
 /// the distance and the path taken respectively.
-pub fn bfs(mut g: graph::Graph, s: usize) -> Option<(usize, Vec<usize>)> {
+pub fn search(g: &graph::Graph, s: usize) -> Option<(usize, Vec<usize>)> {
   // Mark all vertices as not visited
   let mut visited: Vec<_> = (0..(g.vertices.len())).map(|_| false).collect();
   let mut q = VecDeque::new();

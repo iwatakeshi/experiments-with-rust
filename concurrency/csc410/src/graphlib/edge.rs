@@ -3,7 +3,7 @@
   Takeshi I.
 */
 use std::cmp::Ordering;
-#[derive(Eq)]
+#[derive(Eq, Clone, Copy)]
 #[allow(unused)]
 pub struct Edge {
   pub v: usize,

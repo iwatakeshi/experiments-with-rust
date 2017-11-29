@@ -4,7 +4,7 @@
 */
 mod graphlib;
 use graphlib::graph::Graph;
-use graphlib::algorithms::bfs::serial::bfs;
+use graphlib::algorithms::bfs;
 
 fn main() {
   let mut g = Graph::new(4);
@@ -17,7 +17,15 @@ fn main() {
   g.add_directed_edge(3, 3);
   g.print();
 
-  match bfs(g, 2) {
+  match bfs::serial::search(&g, 2) {
+    Some(result) => {
+      // let (distance, path) = result;
+      println!("Path: {:?}", result.1);
+    }
+    None => println!("No path was found."),
+  }
+
+  match bfs::parallel::search(&g, 2) {
     Some(result) => {
       // let (distance, path) = result;
       println!("Path: {:?}", result.1);

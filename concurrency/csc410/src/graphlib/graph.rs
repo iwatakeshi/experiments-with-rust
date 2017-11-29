@@ -36,7 +36,7 @@ use super::edge;
 /// }
 
 
-
+#[derive(Clone)]
 pub struct Graph {
   pub size: usize,
   pub edges: Vec<edge::Edge>,
