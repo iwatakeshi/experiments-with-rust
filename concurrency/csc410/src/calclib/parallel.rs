@@ -2,6 +2,7 @@
   Authors:
   Jeremy I.
   Takeshi I.
+  Jordan Jorgensen
 */
 use std::thread;
 
