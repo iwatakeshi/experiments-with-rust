@@ -1,6 +1,7 @@
 /*
   Author:
   Takeshi I.
+  Jordan Jorgensen
 */
 pub fn riemanns_sum(a: isize, b: isize, n: usize, func: fn(f64) -> f64) -> f64 {
   let mut area: f64 = 0.0;
