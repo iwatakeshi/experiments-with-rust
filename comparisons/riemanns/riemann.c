@@ -52,15 +52,15 @@ int main(int argc, char* argv[]) {
 
 //  Will run parallel then sequential
   omp_set_num_threads(threads);
-  time_t start = time(NULL);
+  clock_t start = clock();
   printf("Parallel: %f\n", area(square, a, b, n));
-  double seconds = time(NULL) - start;
-  printf("\tParallel time: %d~\n", seconds);
+  clock_t stop = clock();
+  printf("\tParallel time: %f~\n", (((stop - start) / (double)CLOCKS_PER_SEC)) / threads);
 
-  start = time(NULL);
+  clock_t start_s = clock();
   printf("Serial:   %f\n", area_seq(square, a, b, n));
-  seconds = time(NULL) - start;
-  printf("\tSerial time:   %d~\n", seconds);
+  clock_t stop_s = clock();
+  printf("\tSerial time:   %f\n", (stop_s - start_s) / (double)CLOCKS_PER_SEC);
 
   return 0;
 }
