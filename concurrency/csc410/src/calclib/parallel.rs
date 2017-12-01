@@ -12,17 +12,16 @@ fn riemanns_sum_worker(
     b: isize,
     n: usize,
     threads: usize,
-    func: fn(f32) -> f32,
-) -> f32 {
+    func: fn(f64) -> f64, ) -> f64 {
     let mut slice = tid;
-    let mut area: f32 = 0.0;
-    // variables of different types must be cast appropriately. i32 as f32
-    let delta: f32 = (b as f32 - a as f32).abs() / n as f32;
+    let mut area: f64 = 0.0;
+    // variables of different types must be cast appropriately. i32 as f64
+    let delta: f64 = (b as f64 - a as f64).abs() / n as f64;
     //println!("delta {:.2}", delta);
     while slice < n {
         // println!("Hi, I'm thread {} doing slice {} of {}", tid, slice, NUM_RECTANGLES);
-        let height: f32 = func((slice as f32) * delta + (a as f32));
-        area += (height * delta) as f32;
+        let height: f64 = func((slice as f64) * delta + (a as f64));
+        area += (height * delta) as f64;
 
         slice += threads; // dynamically distribute remaining work by tid
     }
@@ -37,8 +36,8 @@ pub fn riemanns_sum(
     b: isize,
     n: usize,
     threads: usize,
-    func: fn(f32) -> f32,
-) -> f32 {
+    func: fn(f64) -> f64,
+) -> f64 {
     // vector to hold the thread results
     let mut children = vec![];
 
@@ -62,7 +61,7 @@ pub fn riemanns_sum(
 
 
 // // Formula to calculate and return
-// fn formula(x: f32) -> f32 {
+// fn formula(x: f64) -> f64 {
 //     // Verify correct formula and global var output:
 //     //     https://www.intmath.com/integration/riemann-sums.php
 //     // uncomment desired return formula
