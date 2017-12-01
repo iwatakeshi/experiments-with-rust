@@ -1,6 +1,7 @@
 /*
   Authors:
   Takeshi I.
+  Jordan Jorgensen
 */
 mod calclib;
 use calclib::formula;
